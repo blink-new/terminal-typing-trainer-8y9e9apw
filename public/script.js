@@ -148,13 +148,13 @@ function showResults() {
   // Fun message based on performance
   let message = '';
   if (wpm > 60 && accuracy > 90) {
-    message = 'Phenomenal! You type like you're hacking the mainframe!';
+    message = 'Phenomenal! You type like you\'re hacking the mainframe!';
   } else if (wpm > 40 && accuracy > 80) {
-    message = 'Great job! You'd make a fine terminal warrior!';
+    message = 'Great job! You\'d make a fine terminal warrior!';
   } else if (wpm > 20) {
     message = 'Not bad! Keep practicing those terminal commands!';
   } else {
-    message = 'You're on the right path. More practice and you'll be a terminal ninja!';
+    message = 'You\'re on the right path. More practice and you\'ll be a terminal ninja!';
   }
   
   messageElement.textContent = message;
