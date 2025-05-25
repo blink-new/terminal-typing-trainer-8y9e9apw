@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Typing Trainer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <span class="terminal-title">Terminal Typing Trainer</span>
+      <div class="terminal-buttons">
+        <span class="terminal-button red"></span>
+        <span class="terminal-button yellow"></span>
+        <span class="terminal-button green"></span>
+      </div>
+    </div>
+    <div class="terminal-content">
+      <div class="info-container">
+        <p class="info-text">Practice typing common terminal commands. Type the command shown below:</p>
+        <div class="stats">
+          <div>Current: <span id="current-command-index">1</span>/<span id="total-commands">5</span></div>
+          <div id="timer" class="hidden">Time: <span id="time">0</span>s</div>
+        </div>
+      </div>
+      
+      <div class="command-container">
+        <span class="prompt">$</span>
+        <div id="command-display"></div>
+      </div>
+      
+      <div class="input-container">
+        <span class="prompt">$</span>
+        <input type="text" id="command-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      
+      <div id="results" class="results hidden">
+        <h2>Results:</h2>
+        <div class="result-item">Words per minute: <span id="wpm">0</span></div>
+        <div class="result-item">Accuracy: <span id="accuracy">0</span>%</div>
+        <div class="result-item" id="message"></div>
+        <button id="try-again" class="try-again-btn">Try Again</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

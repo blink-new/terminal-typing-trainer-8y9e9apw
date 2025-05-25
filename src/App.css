@@ -1,0 +1,202 @@
+/* Terminal Typing Trainer Styles */
+:root {
+  --terminal-bg: #0d1117;
+  --terminal-text: #00ff00;
+  --terminal-text-dim: #00aa00;
+  --terminal-header: #1f2428;
+  --terminal-prompt: #64d7ff;
+  --terminal-correct: #00ff00;
+  --terminal-incorrect: #ff4444;
+  --terminal-neutral: #aaaaaa;
+  --terminal-success: #00bbff;
+  --terminal-border: #30363d;
+  --terminal-button: #238636;
+  --terminal-button-hover: #2ea043;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #161b22;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Fira Code', monospace;
+}
+
+.terminal-container {
+  width: 90%;
+  max-width: 800px;
+  height: 500px;
+  background-color: var(--terminal-bg);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--terminal-border);
+}
+
+.terminal-header {
+  background-color: var(--terminal-header);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.close {
+  background-color: #ff5f56;
+}
+
+.minimize {
+  background-color: #ffbd2e;
+}
+
+.maximize {
+  background-color: #27c93f;
+}
+
+.terminal-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  color: var(--terminal-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.terminal-line {
+  margin-bottom: 8px;
+}
+
+.prompt {
+  color: var(--terminal-prompt);
+  margin-right: 8px;
+}
+
+.terminal-input {
+  background-color: transparent;
+  border: none;
+  color: var(--terminal-text);
+  font-family: 'Fira Code', monospace;
+  font-size: 16px;
+  caret-color: var(--terminal-text);
+  outline: none;
+  width: calc(100% - 20px);
+}
+
+.terminal-footer {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--terminal-border);
+}
+
+.terminal-button {
+  background-color: var(--terminal-button);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.terminal-button:hover {
+  background-color: var(--terminal-button-hover);
+}
+
+.terminal-welcome {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.terminal-results {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.stat-label {
+  color: var(--terminal-prompt);
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.char-correct {
+  color: var(--terminal-correct);
+}
+
+.char-incorrect {
+  color: var(--terminal-incorrect);
+  text-decoration: underline;
+}
+
+.char-neutral {
+  color: var(--terminal-neutral);
+}
+
+.success {
+  color: var(--terminal-success);
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-top: 20px;
+  color: var(--terminal-prompt);
+  font-style: italic;
+}
+
+.current-command {
+  display: inline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .terminal-container {
+    width: 95%;
+    height: 450px;
+  }
+  
+  .terminal-body {
+    font-size: 14px;
+  }
+  
+  .terminal-input {
+    font-size: 14px;
+  }
+}

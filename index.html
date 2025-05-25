@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Typing Trainer</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- CRITICAL: DO NOT REMOVE/MODIFY THIS COMMENT OR THE SCRIPT BELOW -->
+  <script src="https://blink.new/auto-engineer.js?projectId=terminal-typing-trainer-8y9e9apw" type="module"></script>
+  <style>
+    :root {
+      --terminal-green: #00ff00;
+      --terminal-green-dim: #00cc00;
+      --terminal-red: #ff0000;
+      --terminal-bg: #0c0c0c;
+      --terminal-cursor: #ffffff;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Courier New', monospace;
+    }
+    
+    body {
+      background-color: var(--terminal-bg);
+      color: var(--terminal-green);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .terminal {
+      width: 100%;
+      max-width: 800px;
+      background-color: var(--terminal-bg);
+      border: 1px solid var(--terminal-green-dim);
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--terminal-green-dim);
+      padding-bottom: 10px;
+    }
+    
+    .terminal-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .terminal-controls {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .control-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--terminal-green-dim);
+    }
+    
+    .terminal-body {
+      margin-bottom: 20px;
+    }
+    
+    .prompt {
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    .command-display {
+      color: var(--terminal-green);
+      margin-bottom: 5px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .typed-command {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    
+    .command-char {
+      display: inline-block;
+    }
+    
+    .command-char.correct {
+      color: var(--terminal-green);
+    }
+    
+    .command-char.incorrect {
+      color: var(--terminal-red);
+      text-decoration: underline;
+    }
+    
+    .command-input {
+      background-color: transparent;
+      border: none;
+      color: var(--terminal-green);
+      font-size: 18px;
+      width: 100%;
+      outline: none;
+      caret-color: var(--terminal-cursor);
+      padding: 5px 0;
+    }
+    
+    .command-input::placeholder {
+      color: var(--terminal-green-dim);
+      opacity: 0.7;
+    }
+    
+    .input-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .prompt-symbol {
+      margin-right: 10px;
+    }
+    
+    .cursor-blink {
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-color: var(--terminal-cursor);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
+    
+    .results {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed var(--terminal-green-dim);
+      border-radius: 4px;
+    }
+    
+    .result-item {
+      margin-bottom: 10px;
+    }
+    
+    .try-again-btn {
+      background-color: var(--terminal-green);
+      color: var(--terminal-bg);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+    }
+    
+    .try-again-btn:hover {
+      background-color: var(--terminal-green-dim);
+    }
+    
+    .typing-progress {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      font-size: 14px;
+      color: var(--terminal-green-dim);
+    }
+    
+    .completed {
+      color: var(--terminal-green);
+    }
+    
+    .terminal-message {
+      margin-top: 20px;
+      font-size: 16px;
+      text-align: center;
+      color: var(--terminal-green);
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      border-right: 2px solid var(--terminal-green);
+      animation: typing 3.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+    }
+    
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--terminal-green) }
+    }
+    
+    /* Scan lines effect for terminal look */
+    .terminal::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0)
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0.2;
+    }
+    
+    /* Glow effect */
+    .terminal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.3);
+      pointer-events: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="terminal-title">Terminal Typing Trainer</div>
+      <div class="terminal-controls">
+        <div class="control-dot"></div>
+        <div class="control-dot"></div>
+        <div class="control-dot"></div>
+      </div>
+    </div>
+    
+    <div class="terminal-body">
+      <div id="command-container">
+        <div class="command-display">
+          <span class="prompt-symbol">$</span>
+          <div id="current-command" class="typed-command"></div>
+        </div>
+        <div class="input-container">
+          <span class="prompt-symbol">$</span>
+          <input type="text" id="command-input" class="command-input" autocomplete="off" placeholder="Type the command above..." spellcheck="false">
+        </div>
+      </div>
+      
+      <div class="typing-progress">
+        <span id="progress-text">Command 1 of 5</span>
+        <span id="timer">00:00</span>
+      </div>
+    </div>
+    
+    <div id="results" class="results">
+      <div class="result-item">Words per minute: <span id="wpm">0</span></div>
+      <div class="result-item">Accuracy: <span id="accuracy">0</span>%</div>
+      <div id="terminal-message" class="terminal-message"></div>
+      <button id="try-again-btn" class="try-again-btn">Try Again</button>
+    </div>
+  </div>
+  
+  <script>
+    // List of terminal commands for the typing test
+    const commands = [
+      'npm install --save-dev typescript',
+      'git commit -m "Initial commit"',
+      'docker build -t myapp .',
+      'ls -la /var/www/html',
+      'ssh user@192.168.1.100'
+    ];
+    
+    // DOM elements
+    const commandInput = document.getElementById('command-input');
+    const currentCommandEl = document.getElementById('current-command');
+    const progressText = document.getElementById('progress-text');
+    const timerEl = document.getElementById('timer');
+    const wpmEl = document.getElementById('wpm');
+    const accuracyEl = document.getElementById('accuracy');
+    const resultsEl = document.getElementById('results');
+    const tryAgainBtn = document.getElementById('try-again-btn');
+    const terminalMessage = document.getElementById('terminal-message');
+    
+    // Game state
+    let currentCommandIndex = 0;
+    let startTime = null;
+    let timerInterval = null;
+    let totalKeystrokes = 0;
+    let correctKeystrokes = 0;
+    let elapsedSeconds = 0;
+    
+    // Fun messages to display at the end
+    const funMessages = [
+      'Nice typing, hacker!',
+      'You\'re terminal-ly talented!',
+      'Sudo make me a sandwich, you\'ve earned it!',
+      'chmod 777 skills.txt',
+      'Your fingers are as fast as grep!',
+      'Error 404: Slow typing not found.',
+      'Commit those skills to master!',
+      'You\'ve got command line superpowers!'
+    ];
+    
+    // Initialize the game
+    function init() {
+      currentCommandIndex = 0;
+      totalKeystrokes = 0;
+      correctKeystrokes = 0;
+      elapsedSeconds = 0;
+      
+      displayCurrentCommand();
+      
+      resultsEl.style.display = 'none';
+      commandInput.value = '';
+      commandInput.disabled = false;
+      commandInput.focus();
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+      
+      timerEl.textContent = '00:00';
+      progressText.textContent = `Command 1 of ${commands.length}`;
+      
+      startTime = null;
+    }
+    
+    // Display the current command to type
+    function displayCurrentCommand() {
+      currentCommandEl.innerHTML = '';
+      const command = commands[currentCommandIndex];
+      
+      for (let i = 0; i < command.length; i++) {
+        const charSpan = document.createElement('span');
+        charSpan.classList.add('command-char');
+        charSpan.textContent = command[i];
+        currentCommandEl.appendChild(charSpan);
+      }
+    }
+    
+    // Check user input against the current command
+    function checkInput(input) {
+      const command = commands[currentCommandIndex];
+      const chars = currentCommandEl.querySelectorAll('.command-char');
+      
+      for (let i = 0; i < chars.length; i++) {
+        chars[i].classList.remove('correct', 'incorrect');
+        
+        if (i < input.length) {
+          totalKeystrokes++;
+          if (input[i] === command[i]) {
+            chars[i].classList.add('correct');
+            correctKeystrokes++;
+          } else {
+            chars[i].classList.add('incorrect');
+          }
+        }
+      }
+    }
+    
+    // Start the timer
+    function startTimer() {
+      startTime = new Date();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+    
+    // Update the timer display
+    function updateTimer() {
+      elapsedSeconds++;
+      const minutes = Math.floor(elapsedSeconds / 60);
+      const seconds = elapsedSeconds % 60;
+      timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // Calculate words per minute
+    function calculateWPM() {
+      const totalCommands = commands.slice(0, currentCommandIndex + 1).join(' ');
+      const wordCount = totalCommands.split(' ').length;
+      const minutes = elapsedSeconds / 60;
+      return Math.round(wordCount / minutes);
+    }
+    
+    // Calculate accuracy percentage
+    function calculateAccuracy() {
+      return Math.round((correctKeystrokes / totalKeystrokes) * 100);
+    }
+    
+    // Show results
+    function showResults() {
+      clearInterval(timerInterval);
+      
+      const wpm = calculateWPM();
+      const accuracy = calculateAccuracy();
+      
+      wpmEl.textContent = wpm;
+      accuracyEl.textContent = accuracy;
+      
+      // Select a random fun message
+      const randomMessage = funMessages[Math.floor(Math.random() * funMessages.length)];
+      terminalMessage.textContent = randomMessage;
+      
+      resultsEl.style.display = 'block';
+      commandInput.disabled = true;
+    }
+    
+    // Event listener for command input
+    commandInput.addEventListener('input', (e) => {
+      const input = e.target.value;
+      
+      // Start timer on first keystroke
+      if (!startTime && input.length === 1) {
+        startTimer();
+      }
+      
+      checkInput(input);
+      
+      // If the input matches the current command, move to the next one
+      if (input === commands[currentCommandIndex]) {
+        currentCommandIndex++;
+        
+        // If all commands are completed, show results
+        if (currentCommandIndex >= commands.length) {
+          showResults();
+        } else {
+          // Move to the next command
+          displayCurrentCommand();
+          progressText.textContent = `Command ${currentCommandIndex + 1} of ${commands.length}`;
+          commandInput.value = '';
+        }
+      }
+    });
+    
+    // Event listener for try again button
+    tryAgainBtn.addEventListener('click', init);
+    
+    // Initialize the game on load
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>

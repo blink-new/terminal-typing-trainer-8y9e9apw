@@ -1,0 +1,208 @@
+/* Terminal Typing Trainer CSS */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+
+:root {
+  --terminal-bg: #1a1a1a;
+  --terminal-text: #00ff00;
+  --terminal-header: #333333;
+  --terminal-prompt: #00ff00;
+  --correct-char: #00ff00;
+  --incorrect-char: #ff0000;
+  --terminal-result: #ffffff;
+  --button-bg: #333333;
+  --button-hover: #444444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Fira Code', monospace;
+  background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.terminal {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--terminal-bg);
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.terminal-header {
+  background-color: var(--terminal-header);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #222;
+}
+
+.terminal-title {
+  color: #ddd;
+  font-size: 14px;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.red {
+  background-color: #ff5f56;
+}
+
+.yellow {
+  background-color: #ffbd2e;
+}
+
+.green {
+  background-color: #27c93f;
+}
+
+.terminal-content {
+  padding: 20px;
+  color: var(--terminal-text);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.info-text {
+  margin-bottom: 10px;
+}
+
+.stats {
+  font-size: 14px;
+  color: #888;
+}
+
+.command-container {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.prompt {
+  color: var(--terminal-prompt);
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#command-display {
+  display: inline-block;
+  line-height: 1.5;
+  font-size: 16px;
+  word-break: break-all;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#command-input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--terminal-text);
+  font-family: 'Fira Code', monospace;
+  font-size: 16px;
+  width: 100%;
+  caret-color: var(--terminal-text);
+}
+
+.correct {
+  color: var(--correct-char);
+}
+
+.incorrect {
+  color: var(--incorrect-char);
+  text-decoration: underline;
+}
+
+.results {
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.results h2 {
+  margin-bottom: 15px;
+  color: var(--terminal-result);
+}
+
+.result-item {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.try-again-btn {
+  background-color: var(--button-bg);
+  color: var(--terminal-text);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s;
+}
+
+.try-again-btn:hover {
+  background-color: var(--button-hover);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Typing effect */
+.char {
+  display: inline-block;
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: var(--terminal-text);
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
